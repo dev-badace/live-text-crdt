@@ -1,11 +1,11 @@
 # LiveText Tiptap
 
-LiveText is a collaborative text editor built on top of LiveText Crdt, Liveblocks, TipTap (Prosemirror based) text editor. It works in p2p mode by default, and allows for seamless offline editing.
+LiveText is a collaborative text editor built on top of LiveText Crdt, [Liveblocks](https://liveblocks.io/), [TipTap](https://tiptap.dev/) (Prosemirror based) text editor. It works in p2p mode by default, and allows for seamless offline editing.
 This is a basic basic live text editor demo, which focuses on simplicity over performance and is not suitable for production.
 
 ### How it works?
 
-LiveText is the CRDT based on YATA algorithm (same one as yjs). but it is not as performant as yjs, as it was not the purpose of this demo. all the documents are persisited locally in localhost. we're using liveblocks (presence & broadcast) to communicate the changes,
+LiveText is the CRDT based on YATA algorithm (same one as [yjs](https://yjs.dev/)). but it is not as performant as yjs, as it was not the purpose of this demo. all the documents are persisited locally in localhost. we're using liveblocks (presence & broadcast) to communicate the changes,
 
 ### Protocol
 
