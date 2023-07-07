@@ -13,6 +13,10 @@ export const initializeDoc = (doc: LiveText, roomId: string) => {
 
     const localDoc = localStorage.getItem(getStorageKey(roomId));
 
-    if (localDoc) doc.applyDoc(JSON.parse(localDoc));
+    if (localDoc) {
+      doc.applyDoc(JSON.parse(localDoc));
+    } else {
+      doc.reset();
+    }
   }
 };
