@@ -1,14 +1,21 @@
-import { useEffect } from "react";
+import { ClientSideSuspense } from "@liveblocks/react";
+import { RoomProvider } from "../liveblocks.config";
+import { useSearchParams } from "next/navigation";
+import { TipTap } from "../components/TipTap";
 
 export default function Room() {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      console.log(window.location.search);
-      console.log(urlParams.get("roomId"));
-      console.log(urlParams.get("name"));
-      console.log(urlParams.get("color"));
-    }
-  }, []);
-  return <>Room Shambles</>;
+  const params = useSearchParams();
+
+  if (!params.has("roomId")) return <>Roomid is required</>;
+
+  return (
+    <RoomProvider
+      id={params.get("roomId")!}
+      initialPresence={{ user: null, blockId: null }}
+    >
+      <ClientSideSuspense fallback={<div>Loading...</div>}>
+        {() => <TipTap />}
+      </ClientSideSuspense>
+    </RoomProvider>
+  );
 }
