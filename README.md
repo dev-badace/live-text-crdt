@@ -1,38 +1,22 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LiveText Tiptap
 
-## Getting Started
+LiveText is a collaborative text editor built on top of LiveText Crdt, Liveblocks, TipTap (Prosemirror based) text editor. It works in p2p mode by default, and allows for seamless offline editing.
+This is a basic basic live text editor demo, which focuses on simplicity over performance and is not suitable for production.
 
-First, run the development server:
+### How it works?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+LiveText is the CRDT based on YATA algorithm (same one as yjs). but it is not as performant as yjs, as it was not the purpose of this demo. all the documents are persisited locally in localhost. we're using liveblocks (presence & broadcast) to communicate the changes,
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Protocol
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+In this section we'll talk about the protocol. When a user joins the room, they load their local document from localhost (if present). they're connected to the particular liveblocks room, and liveblocks further handles the coordination, after loading/initializing the document the user broadcasts their state vectors, we have 2 state vectors one for inserts & one for deletes. the way we handle deletes is a little different from yjs, as yjs stores it's deletes as a state CRDT. After the vectors are broadcasted they're received by the connected peers if any. who then broadcast any newupdates or deletes, the connected peers also see if they're missing any updates from the received state vector, if they do, they broadcast their own stateVectors again. and further during editing all the inserts & deletes are broadcasted. if conflicts occur they're handled automatically
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Performance
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+This demo was not intended to be optimized for performance , however Here are the few things that can be used to significantly improve the performance, (tbh yjs has not left anything much for us to improve in terms of performance on the javascript land )
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- improving lookup, right now the items are stored as an array, by storing it a Record<clientId, Items[]> where items are inserted in a sorted order (this is by default required anyways)
+- batching, right now every single character represents a single Item, this is not very efficient batching items will significantly reduce the number of items, improving performance & memory
+- better serde (serialization/deserialization), improving the way we encode and decode data for efficiency, yjs does RLE (run length encoding) of it's documents
+- minor things that yjs does, skip list (a cache of last 10 accessed items, improves lookups), pruning? not sure ,
+- having a length property for our document, right now I'm just using **.toString().length** everywhere to check the length
