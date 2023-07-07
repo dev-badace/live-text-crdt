@@ -1,6 +1,6 @@
 # LiveText Tiptap
 
-LiveText is a collaborative text editor built on top of LiveText Crdt, [Liveblocks](https://liveblocks.io/), [TipTap](https://tiptap.dev/) (Prosemirror based) text editor. It works in p2p mode by default, and allows for seamless offline editing.
+LiveText is a collaborative text editor built on top of LiveText Crdt, [Liveblocks](https://liveblocks.io/), [TipTap](https://tiptap.dev/) (Prosemirror based) text editor. It works in p2p mode by default, and allows for seamless offline editing. [try it](https://livetext-delta.vercel.app/)
 This is a basic basic live text editor demo, which focuses on simplicity over performance and is not suitable for production.
 
 ### How it works?
