@@ -795,8 +795,6 @@ export class LiveText {
   }
 
   reset() {
-    if (this.items.length < 1) return;
-
     this.clientId = randomInt(9999999);
     this.items = [];
     this.pendingUpdates = [];
